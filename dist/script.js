@@ -937,6 +937,7 @@ window.addEventListener('DOMContentLoaded', function () {
 
   Object(_modules_modals__WEBPACK_IMPORTED_MODULE_0__["default"])('.button-design', '.popup-design', '.popup-close');
   Object(_modules_modals__WEBPACK_IMPORTED_MODULE_0__["default"])('.button-consultation', '.popup-consultation', '.popup-close');
+  Object(_modules_modals__WEBPACK_IMPORTED_MODULE_0__["default"])('.fixed-gift', '.popup-gift', '.popup-close', true);
 });
 
 /***/ }),
@@ -955,6 +956,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var modals = function modals(triggerSelector, modalSelector, closeSelector) {
+  var hideTrigger = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
   var clientWidth = document.documentElement.clientWidth;
 
   var openModal = function openModal(e) {
@@ -969,6 +971,12 @@ var modals = function modals(triggerSelector, modalSelector, closeSelector) {
     document.querySelector(modalSelector).style.display = 'none';
     document.body.style.overflow = '';
     document.body.style.marginRight = 0;
+
+    if (hideTrigger) {
+      document.querySelectorAll(triggerSelector).forEach(function (trigger) {
+        return trigger.remove();
+      });
+    }
   };
 
   var scrollWidth = function scrollWidth(oldWidth, newWidth) {
@@ -983,8 +991,10 @@ var modals = function modals(triggerSelector, modalSelector, closeSelector) {
   document.querySelectorAll(closeSelector).forEach(function (close) {
     return close.addEventListener('click', closeModal);
   });
-  document.querySelectorAll('[data-modal]').forEach(function (item) {
-    return item.addEventListener('click', closeModal);
+  document.querySelector(modalSelector).addEventListener('click', function (e) {
+    if (e.target === document.querySelector(modalSelector)) {
+      closeModal();
+    }
   });
 };
 
