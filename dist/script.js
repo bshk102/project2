@@ -937,7 +937,7 @@ window.addEventListener('DOMContentLoaded', function () {
 
   Object(_modules_modals__WEBPACK_IMPORTED_MODULE_0__["default"])('.button-design', '.popup-design', '.popup-close');
   Object(_modules_modals__WEBPACK_IMPORTED_MODULE_0__["default"])('.button-consultation', '.popup-consultation', '.popup-close');
-  Object(_modules_modals__WEBPACK_IMPORTED_MODULE_0__["default"])('.fixed-gift', '.popup-gift', '.popup-close', true);
+  Object(_modules_modals__WEBPACK_IMPORTED_MODULE_0__["default"])('.fixed-gift', '.popup-gift', '.popup-gift .popup-close', true);
 });
 
 /***/ }),
@@ -957,23 +957,26 @@ __webpack_require__.r(__webpack_exports__);
 
 var modals = function modals(triggerSelector, modalSelector, closeSelector) {
   var hideTrigger = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
+  var modal = document.querySelector(modalSelector),
+      triggers = document.querySelectorAll(triggerSelector),
+      closes = document.querySelectorAll(closeSelector);
   var clientWidth = document.documentElement.clientWidth;
 
   var openModal = function openModal(e) {
     if (e.target) e.preventDefault();
-    document.querySelector(modalSelector).style.display = 'block';
+    modal.style.display = 'block';
     document.body.style.overflow = 'hidden';
     var newClientWidth = document.documentElement.clientWidth;
     document.body.style.marginRight = "".concat(scrollWidth(clientWidth, newClientWidth), "px");
   };
 
   var closeModal = function closeModal() {
-    document.querySelector(modalSelector).style.display = 'none';
+    modal.style.display = 'none';
     document.body.style.overflow = '';
     document.body.style.marginRight = 0;
 
     if (hideTrigger) {
-      document.querySelectorAll(triggerSelector).forEach(function (trigger) {
+      triggers.forEach(function (trigger) {
         return trigger.remove();
       });
     }
@@ -983,18 +986,16 @@ var modals = function modals(triggerSelector, modalSelector, closeSelector) {
     return newWidth - oldWidth;
   };
 
-  document.querySelectorAll(triggerSelector).forEach(function (trigger) {
+  triggers.forEach(function (trigger) {
     return trigger.addEventListener('click', function (e) {
       return openModal(e);
     });
   });
-  document.querySelectorAll(closeSelector).forEach(function (close) {
+  closes.forEach(function (close) {
     return close.addEventListener('click', closeModal);
   });
-  document.querySelector(modalSelector).addEventListener('click', function (e) {
-    if (e.target === document.querySelector(modalSelector)) {
-      closeModal();
-    }
+  modal.addEventListener('click', function (e) {
+    if (e.target === modal) closeModal();
   });
 };
 

@@ -1,10 +1,14 @@
 const modals = (triggerSelector, modalSelector, closeSelector, hideTrigger = false) => {
+    const modal = document.querySelector(modalSelector),
+        triggers = document.querySelectorAll(triggerSelector),
+        closes = document.querySelectorAll(closeSelector);
+
     let clientWidth = document.documentElement.clientWidth;
 
     const openModal = e => {
         if (e.target) e.preventDefault();
 
-        document.querySelector(modalSelector).style.display = 'block';
+        modal.style.display = 'block';
         document.body.style.overflow = 'hidden';
 
         let newClientWidth = document.documentElement.clientWidth;
@@ -13,23 +17,21 @@ const modals = (triggerSelector, modalSelector, closeSelector, hideTrigger = fal
     }
 
     const closeModal = () => {
-        document.querySelector(modalSelector).style.display = 'none';
+        modal.style.display = 'none';
         document.body.style.overflow = '';
         document.body.style.marginRight = 0;
 
         if (hideTrigger) {
-            document.querySelectorAll(triggerSelector).forEach(trigger => trigger.remove());
+            triggers.forEach(trigger => trigger.remove());
         }
     }
 
     const scrollWidth = (oldWidth, newWidth) => newWidth - oldWidth;
 
-    document.querySelectorAll(triggerSelector).forEach(trigger => trigger.addEventListener('click', e => openModal(e)));
-    document.querySelectorAll(closeSelector).forEach(close => close.addEventListener('click', closeModal));
-    document.querySelector(modalSelector).addEventListener('click', e => {
-        if (e.target === document.querySelector(modalSelector)) {
-            closeModal();
-        }
+    triggers.forEach(trigger => trigger.addEventListener('click', e => openModal(e)));
+    closes.forEach(close => close.addEventListener('click', closeModal));
+    modal.addEventListener('click', e => {
+        if (e.target === modal) closeModal();
     });
 };
 
